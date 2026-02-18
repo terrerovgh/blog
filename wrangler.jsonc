@@ -1,0 +1,10 @@
+{
+  // Cloudflare Pages configuration
+  // surviving-chernarus blog - Astro 5
+  "name": "blog",
+  "compatibility_date": "2025-01-01",
+  "build": {
+    "command": "npm run build",
+    "output_directory": "dist"
+  }
+}
