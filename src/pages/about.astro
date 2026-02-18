@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About" description="About Terrerov - a cyberpunk blog.">
+  <article class="about">
+    <h1 class="page-title">About</h1>
+    
+    <section class="content">
+      <p>
+        Welcome to the digital frontier. This blog is a space for exploring technology,
+        programming, and the ever-evolving landscape of the digital world.
+      </p>
+
+      <h2>Mission</h2>
+      <p>
+        To document the journey through code, share knowledge, and contribute to the
+        open-source community. Every post is a piece of the puzzle in understanding
+        our technological future.
+      </p>
+
+      <h2>Topics</h2>
+      <ul>
+        <li>Software Development</li>
+        <li>Web Technologies</li>
+        <li>System Administration</li>
+        <li>Open Source Projects</li>
+        <li>Tech Philosophy</li>
+      </ul>
+
+      <h2>Contact</h2>
+      <p>
+        Reach out via the digital channels. This blog is hosted on 
+        <span class="accent">blog.terrerov.cu</span>.
+      </p>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .about {
+    max-width: 800px;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--color-accent);
+  }
+
+  .content h2 {
+    font-size: 1.3rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--color-accent);
+  }
+
+  .content p {
+    color: var(--color-muted);
+    margin-bottom: 1rem;
+  }
+
+  .content ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .content li {
+    color: var(--color-muted);
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+
+  .content li::before {
+    content: '>';
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+  }
+
+  .accent {
+    color: var(--color-accent);
+  }
+</style>

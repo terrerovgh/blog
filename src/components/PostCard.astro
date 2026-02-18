@@ -1,0 +1,76 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { pubDate } = post.data;
+const formattedDate = pubDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<article class="post-card">
+  <a href={`/posts/${post.slug}/`} class="post-link">
+    <div class="post-meta">
+      <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+    </div>
+    <h2 class="post-title">{post.data.title}</h2>
+    <p class="post-description">{post.data.description}</p>
+    <span class="read-more">Read more →</span>
+  </a>
+</article>
+
+<style>
+  .post-card {
+    background: #1f1f1f;
+    border: 1px solid #333;
+    padding: 1.5rem 2rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .post-card:hover {
+    border-color: #ff6b35;
+    transform: translateX(4px);
+  }
+
+  .post-link {
+    text-decoration: none;
+    display: block;
+  }
+
+  .post-meta {
+    margin-bottom: 0.5rem;
+  }
+
+  .post-meta time {
+    color: #ff6b35;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .post-title {
+    color: #fff;
+    font-size: 1.4rem;
+    margin: 0 0 0.75rem 0;
+    font-weight: 700;
+  }
+
+  .post-description {
+    color: #999;
+    font-size: 0.95rem;
+    margin: 0 0 1rem 0;
+    line-height: 1.6;
+  }
+
+  .read-more {
+    color: #ff6b35;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+  }
+</style>

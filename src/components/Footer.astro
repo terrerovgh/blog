@@ -1,0 +1,51 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer-content">
+    <p class="copyright">&copy; {currentYear} Terrerov. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="/rss.xml" class="footer-link">RSS</a>
+      <a href="/sitemap-index.xml" class="footer-link">Sitemap</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: #1a1a1a;
+    border-top: 1px solid #333;
+    padding: 2rem;
+    margin-top: auto;
+  }
+
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .copyright {
+    color: #666;
+    font-size: 0.85rem;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .footer-link {
+    color: #888;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+
+  .footer-link:hover {
+    color: #ff6b35;
+  }
+</style>

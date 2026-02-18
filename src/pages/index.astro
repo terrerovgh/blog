@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostList from '../components/PostList.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout title="Blog" description="A cyberpunk blog about technology, code, and the digital frontier.">
+  <section class="hero">
+    <h1 class="hero-title">Digital<span class="accent">_</span>Frontier</h1>
+    <p class="hero-subtitle">Exploring the intersection of code, technology, and the future</p>
+  </section>
+
+  <section class="posts-section">
+    <h2 class="section-title">Latest Posts</h2>
+    <PostList posts={posts} />
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    text-align: center;
+    padding: 4rem 0;
+    border-bottom: 1px solid #333;
+    margin-bottom: 3rem;
+  }
+
+  .hero-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .accent {
+    color: var(--color-accent);
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  .hero-subtitle {
+    color: var(--color-muted);
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .posts-section {
+    margin-bottom: 3rem;
+  }
+
+  .section-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-accent);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+</style>
