@@ -7,7 +7,7 @@ export interface Props {
   description?: string;
 }
 
-const { title, description = 'A cyberpunk blog' } = Astro.props;
+const { title, description = 'Surviving Chernarus - A DayZ inspired tech blog' } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -16,11 +16,16 @@ const { title, description = 'A cyberpunk blog' } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss.xml" />
-    <title>{title} | Terrerov</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>{title} | Surviving Chernarus</title>
   </head>
   <body>
+    <div class="background-grid"></div>
+    <div class="vignette"></div>
     <Header title={title} />
     <main class="main">
       <slot />
@@ -31,12 +36,26 @@ const { title, description = 'A cyberpunk blog' } = Astro.props;
 
 <style is:global>
   :root {
-    --color-bg: #1a1a1a;
-    --color-surface: #1f1f1f;
-    --color-border: #333;
-    --color-text: #e0e0e0;
-    --color-muted: #999;
-    --color-accent: #ff6b35;
+    --color-bg: #0a0a0c;
+    --color-surface: rgba(15, 15, 18, 0.8);
+    --color-surface-hover: rgba(20, 20, 25, 0.9);
+    --color-border: rgba(196, 77, 45, 0.25);
+    --color-border-glow: rgba(196, 77, 45, 0.5);
+    --color-text: #e8e8ec;
+    --color-text-bright: #ffffff;
+    --color-muted: #9a9aa3;
+    --color-accent: #c44d2d;
+    --color-accent-light: #e0654a;
+    --color-accent-glow: rgba(196, 77, 45, 0.6);
+    --color-danger: #ff3d3d;
+    --font-heading: 'Space Grotesk', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    --glass-bg: rgba(10, 10, 12, 0.75);
+    --glass-border: rgba(196, 77, 45, 0.15);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.6);
+    --shadow-glow: 0 0 30px rgba(196, 77, 45, 0.3);
   }
 
   * {
@@ -46,57 +65,166 @@ const { title, description = 'A cyberpunk blog' } = Astro.props;
   }
 
   html {
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-family: var(--font-body);
     background: var(--color-bg);
     color: var(--color-text);
     scroll-behavior: smooth;
+    font-size: 16px;
   }
 
   body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
+    position: relative;
+    background: 
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(196, 77, 45, 0.08) 0%, transparent 60%),
+      linear-gradient(180deg, var(--color-bg) 0%, #08080a 100%);
+  }
+
+  .background-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      linear-gradient(rgba(196, 77, 45, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(196, 77, 45, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: 0;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 30%, black 0%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 30%, black 0%, transparent 70%);
+  }
+
+  .vignette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+    z-index: 1;
+    pointer-events: none;
   }
 
   .main {
     flex: 1;
-    max-width: 1200px;
+    max-width: 960px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 3rem 1.5rem;
     width: 100%;
+    position: relative;
+    z-index: 2;
   }
 
   a {
-    color: var(--color-accent);
+    color: var(--color-accent-light);
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--color-accent);
+    transition: width 0.3s ease;
+  }
+
+  a:hover {
+    color: var(--color-text-bright);
+    text-shadow: 0 0 12px var(--color-accent-glow);
+  }
+
+  a:hover::after {
+    width: 100%;
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+    border-radius: 2px;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    color: #fff;
-    line-height: 1.3;
+    font-family: var(--font-heading);
+    color: var(--color-text-bright);
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
   }
 
+  h1 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1.5rem; }
+  h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 1.25rem; }
+  h3 { font-size: clamp(1.1rem, 2vw, 1.5rem); margin-bottom: 1rem; }
+
   p {
-    line-height: 1.7;
+    line-height: 1.75;
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--color-muted);
   }
 
   ::selection {
     background: var(--color-accent);
-    color: #000;
+    color: var(--color-text-bright);
   }
 
-  ::-webkit-scrollbar {
-    width: 8px;
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--color-bg); }
+  ::-webkit-scrollbar-thumb { 
+    background: linear-gradient(180deg, var(--color-accent) 0%, #8a3520 100%);
+    border-radius: 4px;
+    border: 2px solid var(--color-bg);
+  }
+  ::-webkit-scrollbar-thumb:hover { 
+    background: var(--color-accent-light);
+    box-shadow: 0 0 10px var(--color-accent-glow);
   }
 
-  ::-webkit-scrollbar-track {
-    background: var(--color-bg);
+  .glitch {
+    position: relative;
   }
 
-  ::-webkit-scrollbar-thumb {
-    background: var(--color-border);
+  .scanner-text {
+    position: relative;
+    overflow: hidden;
   }
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-accent);
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 4px;
+    box-shadow: var(--shadow-md);
+  }
+
+  @media (max-width: 768px) {
+    html { font-size: 15px; }
+    .main { padding: 2rem 1rem; }
+    .background-grid { background-size: 40px 40px; }
+  }
+
+  @media (max-width: 480px) {
+    html { font-size: 14px; }
+    .main { padding: 1.5rem 1rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 </style>

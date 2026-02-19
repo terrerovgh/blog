@@ -10,12 +10,33 @@ const posts = (await getCollection('posts')).sort(
 
 <BaseLayout title="Blog" description="A cyberpunk blog about technology, code, and the digital frontier.">
   <section class="hero">
-    <h1 class="hero-title">Digital<span class="accent">_</span>Frontier</h1>
-    <p class="hero-subtitle">Exploring the intersection of code, technology, and the future</p>
+    <div class="hero-content">
+      <div class="hero-label">
+        <span class="label-dot"></span>
+        <span>TRANSMISSION ACTIVE</span>
+      </div>
+      <h1 class="hero-title glitch" data-text="Digital_Frontier">
+        Digital<span class="accent">_</span>Frontier
+      </h1>
+      <p class="hero-subtitle">Exploring the intersection of code, technology, and survival in the digital wasteland</p>
+      <div class="hero-decoration">
+        <div class="deco-line"></div>
+        <div class="deco-bracket">[</div>
+        <span class="deco-text">EST. 2024</span>
+        <div class="deco-bracket">]</div>
+        <div class="deco-line"></div>
+      </div>
+    </div>
   </section>
 
   <section class="posts-section">
-    <h2 class="section-title">Latest Posts</h2>
+    <div class="section-header">
+      <h2 class="section-title">Latest Transmissions</h2>
+      <div class="section-counter">
+        <span class="counter-value">{posts.length}</span>
+        <span class="counter-label">ENCRYPTED</span>
+      </div>
+    </div>
     <PostList posts={posts} />
   </section>
 </BaseLayout>
@@ -23,46 +44,188 @@ const posts = (await getCollection('posts')).sort(
 <style>
   .hero {
     text-align: center;
-    padding: 4rem 0;
-    border-bottom: 1px solid #333;
-    margin-bottom: 3rem;
+    padding: 4rem 0 3rem;
+    position: relative;
+    margin-bottom: 2rem;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(196, 77, 45, 0.3) 50%, 
+      transparent 100%);
+  }
+
+  .hero-content {
+    position: relative;
+  }
+
+  .hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    background: rgba(0, 255, 100, 0.05);
+    border: 1px solid rgba(0, 255, 100, 0.2);
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-heading);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: #00ff64;
+    text-transform: uppercase;
+  }
+
+  .label-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00ff64;
+    box-shadow: 0 0 8px #00ff64;
+    animation: labelPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes labelPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
   }
 
   .hero-title {
-    font-size: 3.5rem;
+    font-size: clamp(2.5rem, 8vw, 4rem);
     font-weight: 900;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     margin-bottom: 1rem;
+    line-height: 1;
+    position: relative;
   }
 
   .accent {
     color: var(--color-accent);
-    animation: blink 1s infinite;
+    animation: cursorBlink 1s step-end infinite;
   }
 
-  @keyframes blink {
+  @keyframes cursorBlink {
     0%, 50% { opacity: 1; }
     51%, 100% { opacity: 0; }
   }
 
   .hero-subtitle {
     color: var(--color-muted);
-    font-size: 1.1rem;
-    max-width: 500px;
-    margin: 0 auto;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    max-width: 480px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+  }
+
+  .hero-decoration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .deco-line {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-accent));
+  }
+
+  .deco-line:last-of-type {
+    background: linear-gradient(90deg, var(--color-accent), transparent);
+  }
+
+  .deco-bracket {
+    color: var(--color-accent);
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: 0.9rem;
+    opacity: 0.6;
+  }
+
+  .deco-text {
+    font-family: var(--font-heading);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    color: var(--color-muted);
+    text-transform: uppercase;
   }
 
   .posts-section {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(196, 77, 45, 0.15);
   }
 
   .section-title {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.25em;
     color: var(--color-accent);
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--color-border);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .section-title::before {
+    content: '◈';
+    font-size: 0.6rem;
+    opacity: 0.7;
+  }
+
+  .section-counter {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.3rem 0.6rem;
+    background: rgba(196, 77, 45, 0.05);
+    border: 1px solid rgba(196, 77, 45, 0.15);
+    border-radius: 2px;
+  }
+
+  .counter-value {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-text-bright);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .counter-label {
+    font-family: var(--font-heading);
+    font-size: 0.5rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--color-accent);
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 768px) {
+    .hero { padding: 3rem 0 2rem; }
+    .hero-decoration { gap: 0.75rem; }
+    .deco-line { width: 25px; }
+    .section-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  }
+
+  @media (max-width: 480px) {
+    .hero { padding: 2rem 0 1.5rem; }
+    .hero-label { font-size: 0.55rem; padding: 0.3rem 0.8rem; }
   }
 </style>

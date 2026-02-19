@@ -9,68 +9,262 @@ const { post } = Astro.props;
 const { pubDate } = post.data;
 const formattedDate = pubDate.toLocaleDateString('en-US', {
   year: 'numeric',
-  month: 'long',
+  month: 'short',
   day: 'numeric',
 });
 ---
 
 <article class="post-card">
+  <div class="card-corner tl"></div>
+  <div class="card-corner tr"></div>
+  <div class="card-corner bl"></div>
+  <div class="card-corner br"></div>
   <a href={`/posts/${post.slug}/`} class="post-link">
     <div class="post-meta">
-      <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+      <div class="meta-left">
+        <time datetime={pubDate.toISOString()} class="post-date">{formattedDate}</time>
+        <span class="divider">//</span>
+        <span class="read-time">3 MIN READ</span>
+      </div>
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        <span class="status-text">DECRYPTED</span>
+      </div>
     </div>
-    <h2 class="post-title">{post.data.title}</h2>
+    <h2 class="post-title scanner-text">{post.data.title}</h2>
     <p class="post-description">{post.data.description}</p>
-    <span class="read-more">Read more →</span>
+    <div class="post-footer">
+      <span class="access-label">ACCESS TRANSMISSION</span>
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+      <span class="arrow">→</span>
+    </div>
   </a>
 </article>
 
 <style>
   .post-card {
-    background: #1f1f1f;
-    border: 1px solid #333;
-    padding: 1.5rem 2rem;
-    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+    background: rgba(12, 12, 15, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(196, 77, 45, 0.12);
+    border-radius: 4px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .post-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+      rgba(196, 77, 45, 0.03) 0%, 
+      transparent 50%);
+    pointer-events: none;
+  }
+
+  .card-corner {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: var(--color-accent);
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+  }
+
+  .card-corner.tl { top: 8px; left: 8px; border-top: 1px solid; border-left: 1px solid; }
+  .card-corner.tr { top: 8px; right: 8px; border-top: 1px solid; border-right: 1px solid; }
+  .card-corner.bl { bottom: 8px; left: 8px; border-bottom: 1px solid; border-left: 1px solid; }
+  .card-corner.br { bottom: 8px; right: 8px; border-bottom: 1px solid; border-right: 1px solid; }
+
+  .card-scan {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      var(--color-accent) 50%, 
+      transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
   }
 
   .post-card:hover {
-    border-color: #ff6b35;
-    transform: translateX(4px);
+    background: rgba(15, 15, 20, 0.85);
+    border-color: rgba(196, 77, 45, 0.35);
+    transform: translateY(-4px);
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.4),
+      0 0 30px rgba(196, 77, 45, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.03);
   }
+
+  .post-card:hover .card-corner { opacity: 1; }
 
   .post-link {
     text-decoration: none;
     display: block;
+    position: relative;
+    z-index: 2;
   }
+
+  .post-link::after { display: none; }
 
   .post-meta {
-    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
   }
 
-  .post-meta time {
-    color: #ff6b35;
-    font-size: 0.8rem;
+  .meta-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .post-date {
+    font-family: var(--font-heading);
+    color: var(--color-accent);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .divider {
+    color: var(--color-accent);
+    opacity: 0.5;
+    font-size: 0.65rem;
+  }
+
+  .read-time {
+    color: var(--color-muted);
+    font-size: 0.65rem;
+    font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
-  .post-title {
-    color: #fff;
-    font-size: 1.4rem;
-    margin: 0 0 0.75rem 0;
+  .status-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.6rem;
+    background: rgba(196, 77, 45, 0.08);
+    border: 1px solid rgba(196, 77, 45, 0.2);
+    border-radius: 2px;
+  }
+
+  .status-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    animation: statusPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes statusPulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 4px var(--color-accent); }
+    50% { opacity: 0.5; box-shadow: none; }
+  }
+
+  .status-text {
+    font-family: var(--font-heading);
+    font-size: 0.55rem;
     font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--color-accent);
+  }
+
+  .post-title {
+    color: var(--color-text-bright);
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin: 0 0 1rem 0;
+    transition: color 0.3s ease;
+  }
+
+  .post-card:hover .post-title {
+    text-shadow: 0 0 20px rgba(196, 77, 45, 0.3);
   }
 
   .post-description {
-    color: #999;
+    color: var(--color-muted);
     font-size: 0.95rem;
-    margin: 0 0 1rem 0;
-    line-height: 1.6;
+    line-height: 1.7;
+    margin: 0 0 1.75rem 0;
+    font-weight: 400;
   }
 
-  .read-more {
-    color: #ff6b35;
-    font-size: 0.85rem;
-    letter-spacing: 0.05em;
+  .post-footer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .access-label {
+    font-family: var(--font-heading);
+    color: var(--color-text-bright);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 2px;
+    background: rgba(196, 77, 45, 0.15);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .post-card:hover .progress-fill { width: 100%; }
+
+  .arrow {
+    color: var(--color-accent);
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+  }
+
+  .post-card:hover .arrow { transform: translateX(4px); }
+
+  @media (max-width: 768px) {
+    .post-card { padding: 1.5rem; }
+    .post-title { font-size: 1.2rem; }
+    .post-meta { flex-direction: column; align-items: flex-start; }
+    .post-footer { flex-wrap: wrap; }
+    .access-label { font-size: 0.65rem; }
+  }
+
+  @media (max-width: 480px) {
+    .post-card { padding: 1.25rem; margin-bottom: 1rem; }
+    .card-corner { width: 8px; height: 8px; }
+    .post-title { font-size: 1.1rem; }
+    .progress-bar { display: none; }
   }
 </style>
